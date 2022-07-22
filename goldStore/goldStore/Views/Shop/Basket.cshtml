@@ -1,0 +1,194 @@
+﻿@model IEnumerable<goldStore.Models.ViewModel.BasketItem>
+@using goldStore.Areas.Panel.Models.Entity
+@{
+    Layout = null;
+}
+@Html.Partial("~/Views/_Shared/_header.cshtml")
+<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">
+    <div class="ht__bradcaump__wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="bradcaump__inner">
+                        <nav class="bradcaump-inner">
+                            <a class="breadcrumb-item" href="@Url.Action("/")">Anasayfa</a>
+                            <span class="brd-separetor"><i class="zmdi zmdi-chevron-right"></i></span>
+                            <span class="breadcrumb-item active">Alışveriş Sepeti</span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model != null)
+{
+<div class="cart-main-area ptb--100 bg__white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <form action="#">
+                    <div class="table-content table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="product-thumbnail">Resim</th>
+                                    <th class="product-name">Ürün</th>
+                                    <th class="product-price">Fiyat</th>
+                                    <th class="product-quantity">Adet</th>
+                                    <th class="product-subtotal">Tutar</th>
+                                    <th class="product-remove">Sil</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        if (item != null)
+                                        {
+                                            <tr id="@item.Id">
+                                                <td class="product-thumbnail">
+                                                    <a href="#">
+                                                        <img src="@Url.Action("Thumbnail", "Shop", new { width = 290, height = 385, Id = item.product.productId, _imageId = item.product.productImage.FirstOrDefault().imageId })" alt="product img" />
+                                                    </a>
+                                                </td>
+                                                <td class="product-name">
+                                                    <a href="#">@item.product.productName</a>
+                                                    <ul class="pro__prize">
+                                                        <li class="old__prize">₺@item.product.oldPrice</li>
+                                                        <li>₺>@item.product.price</li>
+                                                    </ul>
+                                                </td>
+                                                <td class="product-price"><span class="amount">₺@item.product.price</span></td>
+                                                <td class="product-quantity"><input type="number" value="@item.quantity" /></td>
+                                                <td class="product-subtotal">@(item.quantity * item.product.price)</td>
+                                                <td class="product-remove">
+                                                    <a href="javascript:void(0);" id="deleteBasketItem" item="@item.Id" productId="@item.product.productId">
+                                                        <i class="icon-trash icons"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="ht__coupon__code">
+                                <span>İndirim kuponu</span>
+                                <div class="coupon__box">
+                                    <input id="discountCode" name="discountCode" type="text" placeholder="bir kupona sahipseniz kupon kodunu giriniz">
+                                    <div class="ht__cp__btn">
+                                        <a href="javascript:void(0);" id="applyDiscount">Uygula</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 col-xs-12 smt-40 xmt-40">
+                            <div class="htc__cart__total">
+                                <h6>cart total</h6>
+                                <div class="cart__desk__list">
+                                    <ul class="cart__desc">
+                                        <li>Toplam Tutar</li>
+                                        <li>İndirim</li>
+
+                                    </ul>
+                                    <ul class="cart__price">
+                                        <li>₺@Model.Sum(x => x.product.price * x.quantity)</li>
+                                        <li>
+
+                                            @{
+                                                decimal indirim_tutari = 0;
+                                                if (Session["discount"] != null)
+                                                {
+                                                    coupons _indirim = (coupons)Session["discount"];
+                                                    indirim_tutari = (decimal)_indirim.discount;
+                                                }
+
+                                            }
+                                            ₺ @indirim_tutari
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <div class="cart__total">
+                                    <span>Sipariş Toplam</span>
+                                    <span>₺@(Model.Sum(x => x.product.price * x.quantity) - indirim_tutari)</span>
+                                </div>
+                                <ul class="payment__btn">
+                                    <li class="active"><a href="@Url.Action("Checkout","Shop")">Öde</a></li>
+                                    <li><a href="#">Alışverişe Devam Et</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+
+@{
+    Html.RenderAction("PartialBrands");
+}
+@Html.Partial("~/Views/_Shared/_footer.cshtml")
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(function () {
+        //delete basketItem
+        $("#deleteBasketItem").click(function () {
+            var itemId = $(this).attr("item");
+            var productId = $(this).attr("productId");
+            $.ajax({
+                    type:'POST',
+                    url: '@Url.Action("Remove","Shop")',
+                    data: { productId: productId },
+                success: function (response) {
+                    $("tr#" + itemId).fadeOut(1000);
+                    //sayfayı yenile
+                    location.reload();
+                }
+
+
+
+            });
+
+        });
+
+         // indirim uygulama
+        $("#applyDiscount").click(function () {
+          
+            var discountCode = $("#discountCode").val();
+           
+            if (discountCode != undefined) {
+               // alert(discountCode);
+                $.ajax({
+                    url: '@Url.Action("applyDiscount", "Shop")',
+                    type: 'POST',
+                    data: { discountCode: discountCode },
+                    success: function (response) {
+
+                        location.reload();
+                    } // end success
+                });// end ajax
+            }// end if
+
+            });// end discount
+    });// end function
+
+</script>
+

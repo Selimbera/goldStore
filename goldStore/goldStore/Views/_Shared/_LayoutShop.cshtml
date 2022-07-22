@@ -1,0 +1,99 @@
+﻿
+@Html.Partial("~/Views/_Shared/_header.cshtml")
+<!-- Start Bradcaump area -->
+<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(/Asset/images/bg/4.jpg) no-repeat scroll center center / cover ;">
+    <div class="ht__bradcaump__wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="bradcaump__inner">
+                        <nav class="bradcaump-inner">
+                            <a class="breadcrumb-item" href="index.html">Anasayfa</a>
+                            <span class="brd-separetor"><i class="zmdi zmdi-chevron-right"></i></span>
+                            <span class="breadcrumb-item active">Ürünler</span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Bradcaump area -->
+<!-- Start Product Grid -->
+<section class="htc__product__grid bg__white ptb--100">
+    <div class="container">
+        <div class="row">
+            @RenderBody()
+            <div class="col-lg-3 col-lg-pull-9 col-md-3 col-md-pull-9 col-sm-12 col-xs-12 smt-40 xmt-40">
+                <div class="htc__product__leftsidebar">
+                    <!-- Start Prize Range -->
+                    <div class="htc-grid-range">
+                        <h4 class="title__line--4">Fiyat Aralığı</h4>
+                        @{
+                            Html.RenderAction("PartialPrice");
+                        }
+
+                    </div>
+                    <!-- End Prize Range -->
+                    <!-- Start Category Area -->
+                    <div class="htc__category">
+                        <h4 class="title__line--4">Kategoriler</h4>
+                        @{
+                            Html.RenderAction("PartialCategory","Shop");
+                        }
+
+                    </div>
+                    <!-- End Category Area -->
+                    <!-- Start Pro Color -->
+                    <!-- <div class="ht__pro__color">
+        <h4 class="title__line--4">color</h4>
+        <ul class="ht__color__list">
+            <li class="grey"><a href="#">grey</a></li>
+            <li class="lamon"><a href="#">lamon</a></li>
+            <li class="white"><a href="#">white</a></li>
+            <li class="red"><a href="#">red</a></li>
+            <li class="black"><a href="#">black</a></li>
+            <li class="pink"><a href="#">pink</a></li>
+        </ul>
+
+    </div> -->
+                    <!-- End Pro Color -->
+                    <!-- Start Pro Size -->
+                  
+                    <!-- End Pro Size -->
+                    <!-- Start Tag Area -->
+                  
+                    <!-- End Tag Area -->
+                    <!-- Start Compare Area -->
+                    <div class="htc__compare__area">
+                        <h4 class="title__line--4">Karşılaştır</h4>
+                        <ul class="htc__compare__list">
+                            <li><a href="#">White men’s polo<i class="icon-trash icons"></i></a></li>
+                            <li><a href="#">T-shirt for style girl...<i class="icon-trash icons"></i></a></li>
+                            <li><a href="#">Basic dress for women...<i class="icon-trash icons"></i></a></li>
+                        </ul>
+                        <ul class="ht__com__btn">
+                            <li><a href="#">Temizle</a></li>
+                            <li class="compare"><a href="#">Karşılaştır</a></li>
+                        </ul>
+                    </div>
+                    <!-- End Compare Area -->
+                    <!-- Start Best Sell Area -->
+                    @{
+                        Html.RenderAction("_PartialBestSeller","Shop");
+                    }
+                    <!-- End Best Sell Area -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Product Grid -->
+<!-- Start Brand Area -->
+@{
+    Html.RenderAction("PartialBrands");
+}
+<!-- End Brand Area -->
+<!-- Start Banner Area -->
+
+@Html.Partial("~/Views/_Shared/_footer.cshtml")

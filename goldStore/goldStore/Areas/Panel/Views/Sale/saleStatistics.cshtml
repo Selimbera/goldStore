@@ -1,0 +1,83 @@
+﻿@model IEnumerable<goldStore.Areas.Panel.Models.Entity.orderDetails>
+@{
+    ViewBag.Title = "saleStatistics";
+    Layout = "~/Areas/Panel/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="content-box-large">
+    <div class="panel-heading">
+        <div class="panel-title">Satış istatistikleri</div>
+
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+            <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="hero-graph" style="height: 230px;"></div>
+            </div>
+        </div>
+    </div>
+           
+    
+ 
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="hero-bar" style="height: 230px;"></div>
+            </div>
+            <div class="col-md-3">
+                <label id="payment" class="label label-success">Ödeme Tiplerinin Satış Dağılımı</label>
+                <div id="hero-donut" style="height: 230px;"></div>
+            </div>
+            <div class="col-md-3">
+                <label id="kategoriler" class="label label-success">Kategorilerin Satış Dağılımı</label>
+                <div id="hero-donut2" style="height: 230px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(function(){
+    // Line
+
+         $.get('@Url.Action("getLineGraph")', function (result) {
+             // alert(JSON.stringify(result));
+             Morris.Line({
+                 element: 'hero-graph',
+                 data: result,
+                 xkey: 'label',
+                 xLabels: "month",
+                 ykeys: ['value'],
+                 labels: ['Toplam Satışlar']
+             });
+         });
+   // donut
+        $.get('@Url.Action("getGraphDataPaymentType")', function (result) {
+
+            Morris.Donut({
+                element: 'hero-donut',
+                data: result,
+                colors: ["#30a1ec", "#76bdee", "#c4dafe"],
+                formatter: function (y) { return y + "%" }
+            });
+        });
+   
+
+        $.get('@Url.Action("getGraphData")', function (result) {
+           // alert(JSON.stringify(result));
+         
+    Morris.Donut({
+        element: 'hero-donut2',
+        data: result,
+        colors: ["#30a1ec", "#76bdee", "#c4dafe"],
+        formatter: function (y) { return y + "%" }
+    });
+        });
+    });
+</script>
+
